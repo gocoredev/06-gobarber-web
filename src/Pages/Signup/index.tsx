@@ -9,12 +9,22 @@ import * as Yup from 'yup'
 import getValidationErros from '../../utils/getVallidationErrors'
 import Button from '../../components/Button'
 import {FiArrowLeft, FiLock, FiMail, FiUser} from 'react-icons/fi'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
+import api from '../../services/api'
+import { useToast } from '../../hooks/ToastContext'
+
+interface SignUpFormData {
+    name: string;
+    email: string;
+    password: string
+}
+
 const SignUp: React.FC = () =>{
 
     const formRef = useRef<FormHandles>(null)
-
-    const handleSubmit = useCallback(async (data: object) => {
+    const {addToast} = useToast()
+    const history = useHistory()
+    const handleSubmit = useCallback(async (data: SignUpFormData) => {
         try {
 
             formRef.current?.setErrors({})
@@ -28,16 +38,33 @@ const SignUp: React.FC = () =>{
                 abortEarly: false
             })
 
+            await api.post('users', data);
             
+            history.push('/')
+
+            addToast({
+                type: 'success',
+                title: 'Cadastro Realizado',
+                description: 'Bem vindo!'
+            })
+
         } catch(e) {
             
-            const errors = getValidationErros(e)
+            if (e instanceof Yup.ValidationError) {
+                const errors = getValidationErros(e)
             
-            formRef.current?.setErrors(errors)
+                formRef.current?.setErrors(errors)
 
-            console.log(e)
+                return;
+            }
+            
+            addToast({
+                type: 'error',
+                title: 'Erro no cadastro',
+                description: 'Ocorreu um erro ao fazer cadastro, tente novament'
+            })
         }
-    }, [])
+    }, [addToast, history])
 
     return(
     <S.Container>

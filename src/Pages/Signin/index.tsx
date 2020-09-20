@@ -27,7 +27,6 @@ const SignIn: React.FC = () =>{
 
     const history = useHistory()
 
-    console.log(user)
     const handleSubmit = useCallback(async (data: SignInFormData) => {
         try {
 
@@ -45,6 +44,8 @@ const SignIn: React.FC = () =>{
                 email: data.email,
                 password: data.password
             })
+
+            history.push('/dashboard')
             
         } catch(e) {
 
@@ -62,7 +63,7 @@ const SignIn: React.FC = () =>{
                 description: 'Ocorreu um erro ao fazer login, verifique as credenciais'
             })
         }
-    }, [signIn])
+    }, [signIn, history])
 
 
     return(
