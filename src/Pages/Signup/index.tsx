@@ -9,7 +9,8 @@ import * as Yup from 'yup'
 import getValidationErros from '../../utils/getVallidationErrors'
 import Button from '../../components/Button'
 import {FiArrowLeft, FiLock, FiMail, FiUser} from 'react-icons/fi'
-const Signup: React.FC = () =>{
+import { Link } from 'react-router-dom'
+const SignUp: React.FC = () =>{
 
     const formRef = useRef<FormHandles>(null)
 
@@ -42,26 +43,28 @@ const Signup: React.FC = () =>{
     <S.Container>
         <S.Background/>
         <S.Content>
+            <S.AnimationContainer>
             <img src={logo} alt=""/>
+                <Form ref={formRef} onSubmit={handleSubmit}>
+                    <h1>Faça seu Cadastro</h1>
 
-            <Form ref={formRef} onSubmit={handleSubmit}>
-                <h1>Faça seu Cadastro</h1>
+                    <Input icon={FiUser} name="name" placeholder="Nome"/>
 
-                <Input icon={FiUser} name="name" placeholder="Nome"/>
+                    <Input icon={FiMail} name="email" placeholder="E-mail"/>
 
-                <Input icon={FiMail} name="email" placeholder="E-mail"/>
+                    <Input icon={FiLock} name="password" placeholder="Senha" type="password"/>
 
-                <Input icon={FiLock} name="password" placeholder="Senha" type="password"/>
+                    <Button type="submit">Cadastrar</Button>
 
-                <Button type="submit">Cadastrar</Button>
+                </Form>
 
-            </Form>
-
-            <a href="/create-account"><FiArrowLeft /> Voltar para logon</a>
+                <Link to="/"><FiArrowLeft /> Voltar para logon</Link>
+            </S.AnimationContainer>
+            
         </S.Content>
         
     </S.Container>
     )
 }
 
-export default Signup
+export default SignUp
